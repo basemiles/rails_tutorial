@@ -42,7 +42,7 @@ describe UsersController do
     before(:each) do
       @user = Factory(:user)
       # Arrange for User.find (params[:id] to find the right user.)
-      User.stub! (:find,@user.id).and_return(@user)
+      User.stub!(:find,@user.id).and_return(@user)
     end
     
     it "should be successful" do
@@ -62,7 +62,7 @@ describe UsersController do
    
 
    it "should have a profile image" do
-     get :show, id => @user
+     get :show, :id => @user
      response.should have_tag("h2>img", :class => "gravatar")
    end
   end
