@@ -2,22 +2,8 @@
 	
 <% form_for(@user) do |f| %>
 	<%= f.error_messages %>
-	<div class="field">
-		<%= f.label :name %><br />
-		<%= f.text_field :name %>
-	</div>
-	<div class="field">
-		<%= f.label :email %><br />
-		<%= f.text_field :email %>
-	</div>
-	<div class="field">
-		<%= f.label :password %><br />
-		<%= f.password_field :password %>
-	</div>
-	<div class="field">
-		<%= f.label :password_confirmation %><br />
-		<%= f.password_field :password_confirmation %>
-	</div>
+	<%= render :partial => 'fields', :locals => { :f => f } %>
+
 	<div class="actions">
 		<%= f.submit "Update" %>
 	</div>
@@ -25,6 +11,6 @@
 
 <div>
 	<%= gravatar_for @user %>
-	<a href="http://gravatar.com/emails">change</a>
+	<a href="http://gravatar.com/emails" TARGET="_blank" >change</a>
 </div>
 		

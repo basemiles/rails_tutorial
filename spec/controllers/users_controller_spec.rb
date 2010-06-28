@@ -52,6 +52,22 @@ describe UsersController do
         response.should have_tag("a[href=?]", "/users?page=2", "2")
         response.should have_tag("a[href=?]", "/users?page=2", "Next &raquo;")
       end
+      
+      it "should not have a 'delete' link" do
+        get :index
+        response.should_not have_tag("a", /delete/i)
+      end
+      
+    end
+    
+    describe "for an admin user" do
+      
+      it "should have a 'delete' link" do
+        admin = Factory(:user, :email => "admin@example.com", :admin => true)
+        test_sign_in(admin)
+        get :index
+        response.should have_tag("a",/delete/i)
+      end
     end
   end
 
@@ -291,18 +307,19 @@ describe UsersController do
     end
     
     describe "as a non-admin user" do
-      it "should protect the page" do
-        test_sign_in(@user)          
+          
+      it "should protect the page" do  
+        test_sign_in(@user)       
         delete :destroy, :id => @user
         response.should redirect_to(root_path)
       end
     end
-
+    
     describe "as an admin user" do
     
       before(:each) do
-        admin = Factory(:user, :email => "admin@example.com", :admin => true)
-        test_sign_in(admin)
+        @admin = Factory(:user, :email => "admin@example.com", :admin => true)
+        test_sign_in(@admin)
         User.should_receive(:find).with(@user).and_return(@user)
         @user.should_receive(:destroy).and_return(@user)
       end
@@ -311,6 +328,12 @@ describe UsersController do
         delete :destroy, :id => @user
         response.should redirect_to(users_path)
       end
+      
+#      it "should not destroy the admin user" do
+#       delete :destroy, :id => @admin
+#       response.should redirect_to(users_path)
+#      end
+
     end
   end
 end
